@@ -39,6 +39,16 @@ VALIDATE $? "enabling mysqld"
 systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "starting mysqld"
 
-mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
-VALIDATE $? "setting root password"
+#mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
+#VALIDATE $? "setting root password"
 
+#Below code will be useful for idempotent nature
+
+mysql -h db.santhosh78s.online -uroot -pExpenseApp@1 -e'SHOW DATABASES;' &>>$LOGFILE
+if [ $? -ne 0]
+then
+    mysql_secure_installation --set-root-pass ExpenseApp@1
+    VALIDATE $? "MySQL root password setup"
+else
+    echo -e "MySQL root password is already setup...$Y SKIPPING $N"
+fi
