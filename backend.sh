@@ -34,8 +34,9 @@ fi
 dnf module disable nodejs -y &>>$LOGFILE
 VALIDATE $? "Disabling default nodjs"
 
-dnf module enable nodejs:16 -y &>>"$LOGFILE"
-VALIDATE $? "Enabling Node.js version 16"
+dnf module enable nodejs:20 -y &>>$LOGFILE
+
+VALIDATE $? "enabling nodejs:20 version"
 
 dnf install nodejs -y &>>$LOGFILE
 VALIDATE $? "installing nodejs"
