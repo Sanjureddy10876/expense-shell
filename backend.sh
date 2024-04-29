@@ -69,7 +69,7 @@ VALIDATE $? "Unzipping backend"
 npm install &>>$LOGFILE
 VALIDATE $? "Installing nodejs dependencies"
 
-cp /home/ec2-user/expense-shell/backend.service etc/systemmd/system/backend.service &>>$LOGFILE
+cp /home/ec2-user/expense-shell/backend.service /etc/systemmd/system/backend.service &>>$LOGFILE
 VALIDATE $? "Copying backend service file"
 
 systemctl daemon-reload &>>$LOGFILE
