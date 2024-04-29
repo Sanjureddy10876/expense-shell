@@ -14,7 +14,7 @@ W="\e[37m"
 N="\033[0m"
 
 echo "Please Enter DB password:"
-read -s mysql root password
+read -s mysql_root_password
 
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -47,7 +47,7 @@ VALIDATE $? "starting mysqld"
 
 #Below code will be useful for idempotent nature
 
-mysql -h db.santhosh78s.online -uroot -p${mysql_root_password} -e 'SHOW DATABASES;' &>>$LOGFILE
+mysql -h db.santhosh78s.online -uroot -p${mysql_root_password} -e 'show databases;' &>>$LOGFILE
 if [ $? -ne 0]
 then
     mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE
