@@ -34,9 +34,8 @@ fi
 dnf module disable nodejs -y &>>$LOGFILE
 VALIDATE $? "Disabling default nodjs"
 
-dnf module enable nodejs:16 -y &>>$LOGFILE
-
-VALIDATE $? "enabling nodejs:20 version"
+dnf module enable nodejs:16 -y &>>"$LOGFILE"
+VALIDATE $? "Enabling Node.js version 16"
 
 dnf install nodejs -y &>>$LOGFILE
 VALIDATE $? "installing nodejs"
@@ -44,4 +43,4 @@ VALIDATE $? "installing nodejs"
 useradd expense
 VALIDATE $? "creating expense user"
 
-curl -sL https://rpm.nodesource.com/setup
+#curl -sL https://rpm.nodesource.com/setup
