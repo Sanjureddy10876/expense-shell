@@ -41,7 +41,12 @@ VALIDATE $? "enabling nodejs:20 version"
 dnf install nodejs -y &>>$LOGFILE
 VALIDATE $? "installing nodejs"
 
-useradd expense
-VALIDATE $? "creating expense user"
+id expense
+if [ $? -ne 0]
+then useradd expense -y &>>$LOGFILE
+     VALIDATE $? "creating user expense"
+else 
+    echo -e "user expense already created.. $Y SKIPPING $N"
+fi
 
 #curl -sL https://rpm.nodesource.com/setup
