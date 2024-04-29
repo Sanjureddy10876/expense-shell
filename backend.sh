@@ -43,10 +43,24 @@ VALIDATE $? "installing nodejs"
 
 id expense &>>$LOGFILE
 if [ $? -ne 0]
-then useradd expense &>>$LOGFILE
-     VALIDATE $? "creating user expense"
+then 
+    useradd expense &>>$LOGFILE
+    VALIDATE $? "creating user expense"
 else 
     echo -e "user expense already created.. $Y SKIPPING $N"
 fi
 
-#curl -sL https://rpm.nodesource.com/setup
+
+mkdir -p /app
+VALIDATE $? "Creating app directory"
+
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+VALIDATE $? "Downloading backend"
+
+cd /app
+unzip -o /tmp/backend.zip &>>$LOGFILE
+VALIDATE $? "Unzipping backend"
+ 
+npm install
+VALIDATE $? "Installing nodejs dependencies"
+
