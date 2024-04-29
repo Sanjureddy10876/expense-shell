@@ -13,6 +13,8 @@ C="\e[36m"
 W="\e[37m"
 N="\033[0m"
 
+echo "Please Enter DB password:"
+read -s mysql_root_password
 
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -51,16 +53,39 @@ else
 fi
 
 
-mkdir -p /app
+mkdir -p /app &>>$LOGFILE
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip 
+&>>$LOGFILE
 VALIDATE $? "Downloading backend"
 
-cd /app
+cd /app &>>$LOGFILE
+VALIDATE $? "Changing directory to /app"
+
 unzip -o /tmp/backend.zip &>>$LOGFILE
 VALIDATE $? "Unzipping backend"
  
-npm install
+npm install &>>$LOGFILE
 VALIDATE $? "Installing nodejs dependencies"
 
+cp /home/ec2-user/expense-shell/backend.service etc/systemmd/system/backend.service &>>$LOGFILE
+VALIDATE $? "Copying backend service file"
+
+systemctl daemon-reload &>>$LOGFILE
+VALIDATE $? "Reloading systemctl"
+
+systemctl start backend &>>$LOGFILE
+VALIDATE $? "Starting backend service"
+
+systemctl enable backend &>>$LOGFILE
+VALIDATE $? "Enabling backend"
+
+dnf install mysql -y &>>$LOGFILE
+VALIDATE $? "Installing mysql"
+
+mysql -h db.santhosh78s.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+VALIDATE $? "Importing schema"
+
+systemctl restart backend &>>$LOGFILE
+VALIDATE $? "Restarting backend"
